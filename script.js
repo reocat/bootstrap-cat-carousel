@@ -1,8 +1,8 @@
 $(document).ready(function() {
-  var currentAPI = 'https://api.thecatapi.com/v1/images/search';
+  var currentAPI = 'catapi';
 
   // Load initial images
-  loadImages(currentAPI + '?limit=5');
+  loadImages(currentAPI, 5);
 
   // Listen for carousel slide events
   $('#carousel').on('slid.bs.carousel', function() {
@@ -10,25 +10,31 @@ $(document).ready(function() {
     var currentIndex = $items.index($('.active')[0]);
     if (currentIndex === $items.length - 1) {
       // Load more images if we're on the last item
-      loadImages(currentAPI + '?limit=5');
+      loadImages(currentAPI, 5);
     }
   });
 
   // Listen for switch button clicks
   $('#switch-btn').on('click', function() {
-    if (currentAPI === 'https://api.thecatapi.com/v1/images/search') {
-      currentAPI = 'https://nekos.life/api/v2/img/neko';
+    if (currentAPI === 'catapi') {
+      currentAPI = 'neko';
       $(this).text('Switch to Cat API');
     } else {
-      currentAPI = 'https://api.thecatapi.com/v1/images/search';
+      currentAPI = 'catapi';
       $(this).text('Switch to Neko API');
     }
     // Load new images using the current API
-    loadImages(currentAPI + '?limit=5');
+    loadImages(currentAPI, 5);
   });
 });
 
-function loadImages(apiURL) {
+function loadImages(api, limit) {
+  var apiURL = '';
+  if (api === 'catapi') {
+    apiURL = 'https://api.thecatapi.com/v1/images/search?limit=' + limit;
+  } else if (api === 'neko') {
+    apiURL = 'https://nekos.life/api/v2/img/neko?count=' + limit;
+  }
   $.ajax({
     url: apiURL,
     dataType: 'json',
