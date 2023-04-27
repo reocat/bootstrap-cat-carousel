@@ -1,6 +1,8 @@
-$(function() {
+$(document).ready(function() {
+  var currentAPI = 'https://api.thecatapi.com/v1/images/search';
+
   // Load initial images
-  loadImages('https://api.thecatapi.com/v1/images/search?limit=5');
+  loadImages(currentAPI + '?limit=5');
 
   // Listen for carousel slide events
   $('#carousel').on('slid.bs.carousel', function() {
@@ -43,6 +45,12 @@ function loadImages(apiURL) {
         var $img = $('<img>').addClass('d-block w-100').attr('src', cat.url).attr('alt', 'Random cat image');
         $item.append($img);
         $('.carousel-inner').append($item);
+      });
+
+      // Refresh carousel
+      $('.carousel').carousel('pause').removeData().carousel({
+        interval: false,
+        ride: false
       });
     },
     error: function(xhr, textStatus, errorThrown) {
