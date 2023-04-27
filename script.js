@@ -27,12 +27,8 @@ $(document).ready(function() {
 
 function getApiUrl() {
   var urlParams = new URLSearchParams(window.location.search);
-  var catApiParam = urlParams.get('catapi');
-  if (catApiParam == '1') {
-    return 'https://api.thecatapi.com/v1/images/search?limit=10';
-  } else {
-    var nekoApiParam = urlParams.get('neko');
-    if (nekoApiParam == '1') {
+  var nekoApiParam = urlParams.get('neko');
+  if (nekoApiParam == '1') {
       return 'https://nekos.life/api/v2/img/neko';
     } else {
       return 'https://api.thecatapi.com/v1/images/search?limit=10';
