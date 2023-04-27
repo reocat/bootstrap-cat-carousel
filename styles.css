@@ -26,8 +26,8 @@ body {
 }
 
 .carousel-item img {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: auto;
   margin: auto;
   position: absolute;
   top: 0;
