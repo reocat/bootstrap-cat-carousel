@@ -8,7 +8,7 @@ $(document).ready(function() {
     // Check if we're at the last item in the carousel
     var $items = $('.carousel-item');
     var currentIndex = $items.index($('.active'));
-    if (currentIndex === $items.length - 1) {
+    if (currentIndex == $items.length - 1) {
       // We're at the last item, so load a new set of images
       var apiUrl = getApiUrl();
       loadImages(apiUrl);
@@ -19,8 +19,8 @@ $(document).ready(function() {
   $('#api-toggle-button').on('click', function() {
     var urlParams = new URLSearchParams(window.location.search);
     var apiParam = urlParams.get('catapi') || urlParams.get('neko');
-    var newApiParam = apiParam === '1' ? '0' : '1';
-    urlParams.set(apiParam === '1' ? 'catapi' : 'neko', newApiParam);
+    var newApiParam = apiParam == '1' ? '0' : '1';
+    urlParams.set(apiParam == '1' ? 'catapi' : 'neko', newApiParam);
     window.location.search = urlParams.toString();
   });
 });
@@ -28,11 +28,11 @@ $(document).ready(function() {
 function getApiUrl() {
   var urlParams = new URLSearchParams(window.location.search);
   var catApiParam = urlParams.get('catapi');
-  if (catApiParam === '1') {
+  if (catApiParam == '1') {
     return 'https://api.thecatapi.com/v1/images/search?limit=10';
   } else {
     var nekoApiParam = urlParams.get('neko');
-    if (nekoApiParam === '1') {
+    if (nekoApiParam == '1') {
       return 'https://nekos.life/api/v2/img/neko';
     } else {
       return 'https://api.thecatapi.com/v1/images/search?limit=10';
