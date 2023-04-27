@@ -1,38 +1,52 @@
-$(document).ready(function() {
-  // Load initial set of images
-  loadImages();
-  
-  // Listen for the "slid" event on the carousel
-  $('#cat-carousel').on('slid.bs.carousel', function() {
-    // Check if we're at the last item in the carousel
+$(function() {
+  // Load initial images
+  loadImages('https://api.thecatapi.com/v1/images/search?limit=5');
+
+  // Listen for carousel slide events
+  $('#carousel').on('slid.bs.carousel', function() {
     var $items = $('.carousel-item');
-    var currentIndex = $items.index($('.active'));
+    var currentIndex = $items.index($('.active')[0]);
     if (currentIndex === $items.length - 1) {
-      // We're at the last item, so load a new set of images
-      loadImages();
+      // Load more images if we're on the last item
+      loadImages(currentAPI + '?limit=5');
     }
+  });
+
+  // Listen for switch button clicks
+  $('#switch-btn').on('click', function() {
+    if (currentAPI === 'https://api.thecatapi.com/v1/images/search') {
+      currentAPI = 'https://nekos.life/api/v2/img/neko';
+      $(this).text('Switch to Cat API');
+    } else {
+      currentAPI = 'https://api.thecatapi.com/v1/images/search';
+      $(this).text('Switch to Neko API');
+    }
+    // Load new images using the current API
+    loadImages(currentAPI + '?limit=5');
   });
 });
 
-function loadImages() {
+function loadImages(apiURL) {
   $.ajax({
-    url: 'https://api.thecatapi.com/v1/images/search?limit=10',
+    url: apiURL,
     dataType: 'json',
     success: function(data) {
-      // Clear out the existing carousel items
+      // Clear the carousel
       $('.carousel-inner').empty();
       
-      // Add the new images to the carousel
-      for (var i = 0; i < data.length; i++) {
+      // Add a new item for each image
+      $.each(data, function(index, cat) {
         var $item = $('<div>').addClass('carousel-item');
-        var $img = $('<img>').addClass('d-block w-100').attr('src', data[i].url);
+        if (index === 0) {
+          $item.addClass('active');
+        }
+        var $img = $('<img>').addClass('d-block w-100').attr('src', cat.url).attr('alt', 'Random cat image');
         $item.append($img);
         $('.carousel-inner').append($item);
-      }
-      
-      // Set the first item as active and show the carousel
-      $('.carousel-item:first').addClass('active');
-      $('#cat-carousel').show();
+      });
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      console.log('Error loading images: ' + errorThrown);
     }
   });
 }
